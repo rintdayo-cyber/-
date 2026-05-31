@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>運動会の種目紹介</title>
+    <title>🎮 バナナハンター - スコアアタックゲーム</title>
     <style>
         * {
             margin: 0;
@@ -12,216 +12,689 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            color: #333;
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 20px;
             text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            color: white;
+            margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            animation: bounce 1s infinite;
+        }
+        
         .header p {
-            font-size: 1.1em;
+            font-size: 1.2em;
             opacity: 0.9;
         }
         
-        .content {
-            padding: 40px 20px;
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
         
-        .events-grid {
+        .stats-panel {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .event-card {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
             background: white;
-            border: 2px solid #667eea;
-            border-radius: 8px;
             padding: 20px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
         }
         
-        .event-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        .stat {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .difficulty-selector {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .difficulty-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .difficulty-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+        
+        .difficulty-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .difficulty-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border-color: #764ba2;
         }
         
-        .event-card h3 {
-            color: #667eea;
-            font-size: 1.3em;
-            margin-bottom: 10px;
+        .game-area {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        
+        .grid-5 {
+            grid-template-columns: repeat(5, 1fr);
+        }
+        
+        .cell {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 2.5em;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
         }
         
-        .event-icon {
-            font-size: 1.5em;
+        .cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
         
-        .event-card p {
-            color: #555;
-            line-height: 1.6;
-            font-size: 0.95em;
+        .cell:active {
+            transform: scale(0.95);
         }
         
-        .event-card .details {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-            font-size: 0.85em;
-            color: #888;
+        .cell.found {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            animation: pop 0.4s ease;
         }
         
-        .details-item {
-            margin: 5px 0;
+        .cell.bonus {
+            animation: shine 0.6s ease;
         }
         
-        .details-label {
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shine {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .message {
+            text-align: center;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            min-height: 30px;
             font-weight: bold;
+        }
+        
+        .message.success {
+            color: #4caf50;
+        }
+        
+        .message.bonus {
+            color: #ff9800;
+            animation: pulse 0.5s ease;
+        }
+        
+        .message.warning {
+            color: #f44336;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #f5f5f5;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .timer {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
             color: #667eea;
         }
         
-        footer {
-            background: #f5f5f5;
-            padding: 20px;
-            text-align: center;
-            color: #888;
-            border-top: 1px solid #ddd;
+        .timer.warning {
+            color: #ff9800;
+            animation: blink 0.5s infinite;
         }
         
-        @media (max-width: 600px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-            
-            .events-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .content {
-                padding: 20px 15px;
-            }
+        .timer.critical {
+            color: #f44336;
+            animation: blink 0.3s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .game-over {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        
+        .game-over.show {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .game-over h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        
+        .final-stats {
+            font-size: 1.2em;
+            margin: 20px 0;
+            line-height: 2;
+        }
+        
+        .final-stats strong {
+            color: #667eea;
+        }
+        
+        .rank {
+            font-size: 1.5em;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        .leaderboard {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .leaderboard h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+        
+        .leaderboard-rank {
+            font-weight: bold;
+            color: #667eea;
+            min-width: 30px;
+        }
+        
+        .leaderboard-score {
+            font-weight: bold;
+            color: #f5576c;
+        }
+        
+        .trophy {
+            font-size: 1.5em;
+            margin-right: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏃 運動会の種目紹介 🏃</h1>
-            <p>楽しい種目がいっぱい！</p>
+            <h1>🍌 バナナハンター 🎮</h1>
+            <p>バナナを探してスコアを稼ぐアクションゲーム！</p>
         </div>
         
-        <div class="content">
-            <div class="events-grid">
-                <!-- 種目1: 応援 -->
-                <div class="event-card">
-                    <h3><span class="event-icon">📣</span>応援</h3>
-                    <p>クラスやチームを応援する種目です。元気な応援で仲間を盛り上げましょう！</p>
-                    <div class="details">
-                        <div class="details-item"><span class="details-label">対象:</span> 全学年</div>
-                        <div class="details-item"><span class="details-label">人数:</span> 団体</div>
-                        <div class="details-item"><span class="details-label">難易度:</span> ★★☆☆☆</div>
-                    </div>
-                </div>
-                
-                <!-- 種目2: 大玉転がし -->
-                <div class="event-card">
-                    <h3><span class="event-icon">⚪</span>大玉転がし</h3>
-                    <p>大きなボールをみんなで協力して転がします。息を合わせることが大切です。</p>
-                    <div class="details">
-                        <div class="details-item"><span class="details-label">対象:</span> 全学年</div>
-                        <div class="details-item"><span class="details-label">人数:</span> 団体</div>
-                        <div class="details-item"><span class="details-label">難易度:</span> ★★★☆☆</div>
-                    </div>
-                </div>
-                
-                <!-- 種目3: 大玉運び -->
-                <div class="event-card">
-                    <h3><span class="event-icon">🎈</span>大玉運び</h3>
-                    <p>大きなボールを落とさないように慎重に運びます。バランスと協調性が試されます。</p>
-                    <div class="details">
-                        <div class="details-item"><span class="details-label">対象:</span> 全学年</div>
-                        <div class="details-item"><span class="details-label">人数:</span> 2人以上</div>
-                        <div class="details-item"><span class="details-label">難易度:</span> ★★★☆☆</div>
-                    </div>
-                </div>
-                
-                <!-- 種目4: だるま運び -->
-                <div class="event-card">
-                    <h3><span class="event-icon">🪆</span>だるま運び</h3>
-                    <p>だるまを落とさないように走ります。バランスが重要な競技です。</p>
-                    <div class="details">
-                        <div class="details-item"><span class="details-label">対象:</span> 全学年</div>
-                        <div class="details-item"><span class="details-label">人数:</span> 個人</div>
-                        <div class="details-item"><span class="details-label">難易度:</span> ★★★☆☆</div>
-                    </div>
-                </div>
-                
-                <!-- 種目5: リレー -->
-                <div class="event-card">
-                    <h3><span class="event-icon">🔄</span>リレー</h3>
-                    <p>バトンを繋いで速さを競う種目。チームワークが勝利のカギです。</p>
-                    <div class="details">
-                        <div class="details-item"><span class="details-label">対象:</span> 全学年</div>
-                        <div class="details-item"><span class="details-label">人数:</span> 4人×複数</div>
-                        <div class="details-item"><span class="details-label">難易度:</span> ★★★☆☆</div>
-                    </div>
-                </div>
-                
-                <!-- 種目6: 台風の目 -->
-                <div class="event-card">
-                    <h3><span class="event-icon">🌪️</span>台風の目</h3>
-                    <p>円陣を作って走りながらタイムを競います。リズムを合わせることが大切です。</p>
-                    <div class="details">
-                        <div class="details-item"><span class="details-label">対象:</span> 全学年</div>
-                        <div class="details-item"><span class="details-label">人数:</span> 5人以上</div>
-                        <div class="details-item"><span class="details-label">難易度:</span> ★★★★☆</div>
-                    </div>
-                </div>
-                
-                <!-- 種目7: 綱引き -->
-                <div class="event-card">
-                    <h3><span class="event-icon">🔗</span>綱引き</h3>
-                    <p>全員で力を合わせて綱を引く競技。団結力が試されます。</p>
-                    <div class="details">
-                        <div class="details-item"><span class="details-label">対象:</span> 全学年</div>
-                        <div class="details-item"><span class="details-label">人数:</span> 20人以上</div>
-                        <div class="details-item"><span class="details-label">難易度:</span> ★★☆☆☆</div>
-                    </div>
-                </div>
+        <div class="stats-panel">
+            <div class="stat">
+                <div class="stat-label">スコア</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">バナナ</div>
+                <div class="stat-value" id="foundCount">0/<span id="totalBananas">9</span></div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">コンボ</div>
+                <div class="stat-value" id="combo">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">ハイスコア</div>
+                <div class="stat-value" id="highScore">0</div>
             </div>
         </div>
         
-        <footer>
-            <p>&copy; 2026 運動会の種目紹介 | GitHub Pages でホスト</p>
-        </footer>
+        <div class="difficulty-selector">
+            <h3>難易度を選択:</h3>
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn active" onclick="setDifficulty('easy')">🟢 イージー (30秒)</button>
+                <button class="difficulty-btn" onclick="setDifficulty('normal')">🟡 ノーマル (20秒)</button>
+                <button class="difficulty-btn" onclick="setDifficulty('hard')">🔴 ハード (10秒)</button>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="message" id="message"></div>
+            <div class="timer" id="timer"></div>
+            <div class="grid" id="grid"></div>
+            <div class="controls">
+                <button class="btn btn-primary" id="startBtn" onclick="startGame()">ゲーム開始</button>
+                <button class="btn btn-secondary" onclick="resetGame()">リセット</button>
+            </div>
+        </div>
+        
+        <div class="game-over" id="gameOver">
+            <h2>ゲームオーバー！</h2>
+            <div class="final-stats">
+                <div>最終スコア: <strong id="finalScore">0</strong></div>
+                <div>見つけたバナナ: <strong id="finalFound">0</strong></div>
+                <div>最大コンボ: <strong id="maxCombo">0</strong></div>
+            </div>
+            <div class="rank" id="rank"></div>
+            <button class="btn btn-primary" onclick="resetGame()" style="margin-top: 20px;">もう一度プレイ</button>
+        </div>
+        
+        <div class="leaderboard">
+            <h3>🏆 ハイスコアランキング</h3>
+            <div id="leaderboardList"></div>
+        </div>
     </div>
+    
+    <script>
+        const DIFFICULTIES = {
+            easy: { timeLimit: 30, gridSize: 3, bananasPerRound: 3, points: 10 },
+            normal: { timeLimit: 20, gridSize: 4, bananasPerRound: 5, points: 20 },
+            hard: { timeLimit: 10, gridSize: 5, bananasPerRound: 8, points: 50 }
+        };
+        
+        let currentDifficulty = 'easy';
+        let gameState = {
+            score: 0,
+            foundCount: 0,
+            combo: 0,
+            maxCombo: 0,
+            timeRemaining: 30,
+            gameActive: false,
+            bananasInRound: [],
+            timeInterval: null,
+            highScores: []
+        };
+        
+        function setDifficulty(difficulty) {
+            currentDifficulty = difficulty;
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            resetGame();
+        }
+        
+        function startGame() {
+            const config = DIFFICULTIES[currentDifficulty];
+            gameState = {
+                score: 0,
+                foundCount: 0,
+                combo: 0,
+                maxCombo: 0,
+                timeRemaining: config.timeLimit,
+                gameActive: true,
+                bananasInRound: [],
+                timeInterval: null,
+                highScores: gameState.highScores
+            };
+            
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('gameOver').classList.remove('show');
+            document.getElementById('message').textContent = 'バナナを探そう！';
+            document.getElementById('message').className = 'message';
+            
+            generateGrid();
+            updateUI();
+            startTimer();
+        }
+        
+        function generateGrid() {
+            const config = DIFFICULTIES[currentDifficulty];
+            const gridElement = document.getElementById('grid');
+            gridElement.className = `grid grid-${config.gridSize}`;
+            gridElement.innerHTML = '';
+            
+            const totalCells = config.gridSize * config.gridSize;
+            gameState.bananasInRound = [];
+            
+            // ランダムにバナナを配置
+            const positions = new Set();
+            while (positions.size < config.bananasPerRound) {
+                positions.add(Math.floor(Math.random() * totalCells));
+            }
+            gameState.bananasInRound = Array.from(positions);
+            
+            for (let i = 0; i < totalCells; i++) {
+                const cell = document.createElement('button');
+                cell.className = 'cell';
+                const isBarana = gameState.bananasInRound.includes(i);
+                cell.textContent = isBarana ? '🍌' : '❓';
+                cell.onclick = () => cellClick(i);
+                cell.disabled = false;
+                gridElement.appendChild(cell);
+            }
+        }
+        
+        function cellClick(index) {
+            if (!gameState.gameActive) return;
+            
+            const cells = document.querySelectorAll('.cell');
+            cells[index].disabled = true;
+            
+            if (gameState.bananasInRound.includes(index)) {
+                // 正解！
+                gameState.foundCount++;
+                gameState.combo++;
+                gameState.maxCombo = Math.max(gameState.maxCombo, gameState.combo);
+                
+                const config = DIFFICULTIES[currentDifficulty];
+                let points = config.points;
+                
+                // コンボボーナス
+                if (gameState.combo > 1) {
+                    points = Math.floor(points * (1 + (gameState.combo - 1) * 0.5));
+                }
+                
+                gameState.score += points;
+                
+                cells[index].classList.add('found');
+                cells[index].textContent = '✨';
+                
+                document.getElementById('message').textContent = `🎉 ${points}ポイント！ コンボ: ${gameState.combo}`;
+                document.getElementById('message').className = 'message success';
+                
+                if (gameState.foundCount === config.bananasPerRound) {
+                    document.getElementById('message').textContent = 'ラウンドクリア！';
+                    document.getElementById('message').className = 'message bonus';
+                    
+                    // 少し待ってから次のラウンド
+                    setTimeout(() => {
+                        if (gameState.gameActive) {
+                            generateGrid();
+                        }
+                    }, 1000);
+                }
+            } else {
+                // ハズレ
+                gameState.combo = 0;
+                cells[index].textContent = '💨';
+                cells[index].style.background = 'linear-gradient(135deg, #ccc 0%, #999 100%)';
+                document.getElementById('message').textContent = 'ハズレ... コンボがリセット！';
+                document.getElementById('message').className = 'message warning';
+            }
+            
+            updateUI();
+        }
+        
+        function startTimer() {
+            const config = DIFFICULTIES[currentDifficulty];
+            
+            gameState.timeInterval = setInterval(() => {
+                gameState.timeRemaining--;
+                updateTimerDisplay();
+                
+                if (gameState.timeRemaining <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+        
+        function updateTimerDisplay() {
+            const timerEl = document.getElementById('timer');
+            timerEl.textContent = `⏱️ ${gameState.timeRemaining}秒`;
+            
+            if (gameState.timeRemaining <= 3) {
+                timerEl.className = 'timer critical';
+            } else if (gameState.timeRemaining <= 5) {
+                timerEl.className = 'timer warning';
+            } else {
+                timerEl.className = 'timer';
+            }
+        }
+        
+        function endGame() {
+            gameState.gameActive = false;
+            clearInterval(gameState.timeInterval);
+            
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.disabled = true;
+            });
+            
+            // ハイスコア更新
+            gameState.highScores.push({
+                score: gameState.score,
+                difficulty: currentDifficulty,
+                date: new Date().toLocaleString('ja-JP')
+            });
+            gameState.highScores.sort((a, b) => b.score - a.score);
+            gameState.highScores = gameState.highScores.slice(0, 10);
+            localStorage.setItem('bananaHunterScores', JSON.stringify(gameState.highScores));
+            
+            showGameOver();
+            updateUI();
+        }
+        
+        function showGameOver() {
+            const gameOverEl = document.getElementById('gameOver');
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalFound').textContent = gameState.foundCount;
+            document.getElementById('maxCombo').textContent = gameState.maxCombo;
+            
+            // ランク判定
+            let rank = 'C';
+            let rankEmoji = '😢';
+            if (gameState.score > 500) {
+                rank = 'S';
+                rankEmoji = '🌟';
+            } else if (gameState.score > 300) {
+                rank = 'A';
+                rankEmoji = '🏆';
+            } else if (gameState.score > 150) {
+                rank = 'B';
+                rankEmoji = '👍';
+            }
+            
+            document.getElementById('rank').innerHTML = `<div style="font-size: 3em; margin-bottom: 10px;">${rankEmoji}</div>ランク: <strong>${rank}</strong>`;
+            
+            gameOverEl.classList.add('show');
+            document.getElementById('startBtn').disabled = false;
+        }
+        
+        function updateUI() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('foundCount').textContent = gameState.foundCount;
+            document.getElementById('combo').textContent = gameState.combo;
+            
+            const highScore = Math.max(...gameState.highScores.map(s => s.score), 0);
+            document.getElementById('highScore').textContent = highScore;
+            
+            updateLeaderboard();
+        }
+        
+        function updateLeaderboard() {
+            const leaderboardEl = document.getElementById('leaderboardList');
+            
+            if (gameState.highScores.length === 0) {
+                leaderboardEl.innerHTML = '<p style="text-align: center; color: #999;">まだスコアがありません</p>';
+                return;
+            }
+            
+            leaderboardEl.innerHTML = gameState.highScores.map((score, index) => `
+                <div class="leaderboard-item">
+                    <span>
+                        <span class="leaderboard-rank">
+                            ${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}
+                        </span>
+                    </span>
+                    <span>${score.difficulty.toUpperCase()}</span>
+                    <span class="leaderboard-score">${score.score}点</span>
+                </div>
+            `).join('');
+        }
+        
+        function resetGame() {
+            gameState.gameActive = false;
+            clearInterval(gameState.timeInterval);
+            
+            const gridElement = document.getElementById('grid');
+            gridElement.innerHTML = '';
+            document.getElementById('message').textContent = '';
+            document.getElementById('timer').textContent = '';
+            document.getElementById('gameOver').classList.remove('show');
+            document.getElementById('startBtn').disabled = false;
+            
+            gameState.score = 0;
+            gameState.foundCount = 0;
+            gameState.combo = 0;
+            gameState.maxCombo = 0;
+            
+            updateUI();
+        }
+        
+        // 初期化
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('bananaHunterScores');
+            if (saved) {
+                gameState.highScores = JSON.parse(saved);
+            }
+            updateUI();
+        });
+    </script>
 </body>
 </html>
