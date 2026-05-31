@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>かくれんぼゲーム</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .game-area {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            min-height: 400px;
+            position: relative;
+        }
+        
+        .hiding-spots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .spot {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 40px;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .spot:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .spot.found {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .character {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .status {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #333;
+            height: 30px;
+        }
+        
+        .status.success {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .status.hint {
+            color: #ff9800;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 かくれんぼゲーム</h1>
+        
+        <div class="status" id="status">キャラクターを探してね！</div>
+        
+        <div class="game-area">
+            <div class="hiding-spots" id="spots"></div>
+        </div>
+        
+        <button onclick="startGame()">ゲームを開始</button>
+        <button onclick="resetGame()">リセット</button>
+        
+        <div class="info">
+            <strong>ゲームのルール：</strong><br>
+            • 3つの場所の中から隠れているキャラクターを探してください<br>
+            • 正しい場所をクリックすると、ゲームに勝ちです！<br>
+            • 間違った場所をクリックすると、ヒントがもらえます
+        </div>
+    </div>
+    
+    <script>
+        const characters = ['🐰', '🐱', '🐻'];
+        let hidingSpot = 0;
+        let gameActive = false;
+        let attempted = false;
+        
+        function startGame() {
+            gameActive = true;
+            attempted = false;
+            hidingSpot = Math.floor(Math.random() * 3);
+            
+            const spotsContainer = document.getElementById('spots');
+            spotsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 3; i++) {
+                const spot = document.createElement('button');
+                spot.className = 'spot';
+                spot.innerHTML = `
+                    <div class="character">🌳</div>
+                    <div>場所 ${i + 1}</div>
+                `;
+                spot.onclick = () => checkSpot(i);
+                spotsContainer.appendChild(spot);
+            }
+            
+            updateStatus('探してね！');
+        }
+        
+        function checkSpot(index) {
+            if (!gameActive) return;
+            
+            const spots = document.querySelectorAll('.spot');
+            
+            if (index === hidingSpot) {
+                spots[index].classList.add('found');
+                spots[index].innerHTML = `
+                    <div class="character">${characters[Math.floor(Math.random() * characters.length)]}</div>
+                    <div>見つけた！</div>
+                `;
+                updateStatus('🎉 見つけた！おめでとう！', 'success');
+                gameActive = false;
+            } else {
+                attempted = true;
+                updateStatus('❌ ハズレ！別の場所を探してね', 'hint');
+            }
+        }
+        
+        function resetGame() {
+            const spotsContainer = document.getElementById('spots');
+            spotsContainer.innerHTML = '';
+            gameActive = false;
+            attempted = false;
+            updateStatus('ゲームをリセットしました');
+        }
+        
+        function updateStatus(message, className = '') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = 'status ' + className;
+        }
+        
+        // ゲームを自動開始
+        window.addEventListener('load', startGame);
+    </script>
+</body>
+</html>
